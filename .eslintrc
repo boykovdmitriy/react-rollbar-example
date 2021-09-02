@@ -17,6 +17,7 @@
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
     "prettier/prettier": "error",
     "import/no-unresolved": "off",
+    "arrow-body-style": "off",
     "import/prefer-default-export": 0,
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/no-unused-vars": "error",

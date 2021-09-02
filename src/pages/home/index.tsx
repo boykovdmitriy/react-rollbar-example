@@ -27,7 +27,7 @@ export const Home = () => {
   );
 
   const handleSelect = () => {
-    if (value !== '') history.push(`/city/${value}`);
+    if (value !== '') history.push(`/weather?city=${value}`);
   };
 
   return (

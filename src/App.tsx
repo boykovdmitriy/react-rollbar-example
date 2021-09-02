@@ -6,7 +6,7 @@ import { WeatherPage } from './pages/weatherPage';
 function App() {
   return (
     <Switch>
-      <Route path="/city/:city">
+      <Route path="/weather">
         <WeatherPage />
       </Route>
       <Route path="/">
