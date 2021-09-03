@@ -1,21 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+// @ts-ignore
+import { Provider as RollbarProvider } from '@rollbar/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ErrorBoundary } from './components/ErrorBoundry';
 
 const queryClient = new QueryClient();
 
+const rollbarConfig = {
+  accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
+  environment: 'production',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+};
+
 ReactDOM.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <App />
-      </Router>
-    </QueryClientProvider>
-  </React.StrictMode>,
+  <RollbarProvider config={rollbarConfig}>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  </RollbarProvider>,
   document.getElementById('root'),
 );
 
