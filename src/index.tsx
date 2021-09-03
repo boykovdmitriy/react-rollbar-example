@@ -1,34 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-// @ts-ignore
-import { Provider as RollbarProvider } from '@rollbar/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ErrorBoundary } from './components/ErrorBoundry';
 
+Sentry.init({
+  dsn: process.env.REACT_APP_DSN,
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 const queryClient = new QueryClient();
 
-const rollbarConfig = {
-  accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
-  environment: 'production',
-  captureUncaught: true,
-  captureUnhandledRejections: true,
-};
-
 ReactDOM.render(
-  <RollbarProvider config={rollbarConfig}>
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ErrorBoundary>
-  </RollbarProvider>,
+  <Sentry.ErrorBoundary
+    fallback={({ error, componentStack, resetError }: any) => (
+      <>
+        <div>You have encountered an error</div>
+        <div>{error.toString()}</div>
+        <div>{componentStack}</div>
+        <button
+          type="button"
+          onClick={() => {
+            resetError();
+          }}
+        >
+          Click here to reset!
+        </button>
+      </>
+    )}
+  >
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
+  </Sentry.ErrorBoundary>,
   document.getElementById('root'),
 );
 
