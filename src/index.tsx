@@ -22,7 +22,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <Sentry.ErrorBoundary
-    fallback={({ error, componentStack, resetError }) => (
+    fallback={({ error, componentStack, resetError }: any) => (
       <>
         <div>You have encountered an error</div>
         <div>{error.toString()}</div>
