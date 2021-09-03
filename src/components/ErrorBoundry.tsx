@@ -10,11 +10,8 @@ export class ErrorBoundaryClass extends React.Component<any, { hasError: boolean
   }
 
   componentDidCatch(error: any, info: any) {
-    const { rollbar } = this.props;
     // Display fallback UI
     this.setState({ hasError: true });
-
-    rollbar.error(error, info);
   }
 
   render() {
@@ -29,7 +26,5 @@ export class ErrorBoundaryClass extends React.Component<any, { hasError: boolean
 }
 
 export const ErrorBoundary = ({ children }: any) => {
-  const rollbar = useRollbar();
-
-  return <ErrorBoundaryClass rollbar={rollbar}>{children}</ErrorBoundaryClass>;
+  return <ErrorBoundaryClass>{children}</ErrorBoundaryClass>;
 };
